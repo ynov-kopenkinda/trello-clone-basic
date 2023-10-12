@@ -1,19 +1,38 @@
 {
   "dependencies": {
-    "@prisma/client": "^5.4.2",
-    "dotenv-cli": "^7.3.0"
+    "@prisma/client": "^3.10.0"
   },
   "devDependencies": {
-    "prisma": "^5.4.2"
+    "@types/node": "^20.8.4",
+    "prisma": "^3.10.0",
+    "rimraf": "^3.0.2",
+    "tsconfig": "workspace:*",
+    "tsup": "^5.11.13",
+    "tsx": "^3.7.1",
+    "typescript": "^4.5.5"
   },
-  "main": "./index.ts",
+  "files": [
+    "dist/**"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "name": "database",
   "scripts": {
-    "db:generate": "pnpm with-env prisma generate",
-    "db:push": "pnpm with-env prisma db push --skip-generate",
-    "with-env": "dotenv -e ../../.env --"
+    "build": "tsup",
+    "clean": "rimraf .turbo node_modules dist",
+    "db:generate": "prisma generate",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "tsx src/seed.ts",
+    "dev": "tsup --watch",
+    "format": "prisma format",
+    "lint": "eslint \"src/**/*.ts\"",
+    "prebuild": "npm run generate",
+    "predev": "npm run generate",
+    "studio": "prisma studio"
   },
-  "type": "module",
-  "types": "./index.ts",
-  "version": "0.0.0"
+  "types": "./dist/index.d.ts",
+  "version": "1.0.0"
 }

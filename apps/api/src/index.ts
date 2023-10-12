@@ -1,4 +1,4 @@
-import { db } from "./db";
+import { prisma } from "database";
 import { createServer, createWSServer } from "./server";
 import { createServer as createHttpServer } from "node:http";
 
@@ -14,11 +14,11 @@ io.on("connection", (socket) => {
     console.log("user disconnected");
   });
   socket.on("get:tasks", async () => {
-    const tasks = await db.column.findMany();
+    const tasks = await prisma.column.findMany();
     return socket.emit("get:tasks", tasks);
   });
   socket.on("create:task", async (task) => {
-    await db.column.create({
+    await prisma.column.create({
       data: {
         column: "todo",
         priority: 1,
@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
         title: Math.random() + "",
       },
     });
-    const tasks = await db.column.findMany();
+    const tasks = await prisma.column.findMany();
     return socket.emit("get:tasks", tasks);
   });
 });
