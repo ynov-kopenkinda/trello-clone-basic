@@ -1,13 +1,17 @@
-"use client";
 import type { Task } from "../task.type";
-import { useSocket } from "../use-socket";
+import { CardActions } from "./actions";
 import styles from "./card.module.css";
 
+const getStateColor = (state: string): string => {
+  const map: Record<string, string | undefined> = {
+    "in-progress": "#f0ad4e",
+    done: "#5cb85c",
+    todo: "#4fa2d9",
+  };
+  return map[state] ?? "red";
+};
+
 export function Card(props: Task): JSX.Element {
-  const socket = useSocket();
-  if (socket === null) {
-    return <div />;
-  }
   return (
     <div className={styles.card}>
       <b className={styles.title}>{props.title}</b>
@@ -15,59 +19,14 @@ export function Card(props: Task): JSX.Element {
         <p className={styles.description}>{props.description}</p>
       )}
       <div className={styles.footer}>
-        <span className={styles.state}>{props.state}</span>
-        <span className={styles.prioritiy}>{props.priority}</span>
-        {props.state === "in-progress" && (
-          <div className={styles.actions}>
-            <button
-              className={styles.action}
-              onClick={() => {
-                socket.emit("update-status:task", {
-                  id: props.id,
-                  state: "todo",
-                });
-              }}
-              type="button"
-            >
-              &lt;
-            </button>
-            <button
-              className={styles.action}
-              onClick={() => {
-                // eslint-disable-next-line no-alert -- No modal/alert component yet
-                const sure = window.confirm(
-                  "Are you sure you want to mark this task as done? This action is irreversible."
-                );
-                if (!sure) {
-                  return;
-                }
-                socket.emit("update-status:task", {
-                  id: props.id,
-                  state: "done",
-                });
-              }}
-              type="button"
-            >
-              &gt;
-            </button>
-          </div>
-        )}
-        {props.state === "todo" && (
-          <div className={styles.actions}>
-            <button
-              className={styles.action}
-              onClick={() => {
-                socket.emit("update-status:task", {
-                  id: props.id,
-                  state: "in-progress",
-                });
-              }}
-              type="button"
-            >
-              &gt;
-            </button>
-          </div>
-        )}
+        <span
+          className={styles.state}
+          style={{ "--state-color": getStateColor(props.state) }}
+        >
+          {props.state}
+        </span>
+        <span className={styles.prioritiy}>#P{props.priority}</span>
+        <CardActions id={props.id} state={props.state} />
       </div>
     </div>
   );

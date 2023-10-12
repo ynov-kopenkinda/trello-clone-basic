@@ -75,6 +75,13 @@ export default function Page(): JSX.Element {
       done: [] as Task[],
     }
   );
+  const sortTasks = (a: Task, b: Task): -1 | 0 | 1 => {
+    // eslint-disable-next-line no-nested-ternary -- It's fine
+    return a.priority < b.priority ? 1 : a.priority === b.priority ? 0 : -1;
+  };
+  groupedTasks.done.sort(sortTasks);
+  groupedTasks.todo.sort(sortTasks);
+  groupedTasks["in-progress"].sort(sortTasks);
 
   if (socket === null) {
     return <div className={styles.empty}> loading... </div>;
