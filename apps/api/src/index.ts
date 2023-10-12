@@ -29,17 +29,20 @@ io.on("connection", (socket) => {
     return io.emit("create:task", newTask);
   });
 
-  socket.on("update-status:task", async (task: Column, newState: string) => {
-    const updatedTask = await prisma.column.update({
-      where: {
-        id: task.id,
-      },
-      data: {
-        state: newState,
-      },
-    });
-    return io.emit("update-status:task", updatedTask);
-  });
+  socket.on(
+    "update-status:task",
+    async (data: { id: Column["id"]; state: string }) => {
+      const updatedTask = await prisma.column.update({
+        where: {
+          id: data.id,
+        },
+        data: {
+          state: data.state,
+        },
+      });
+      return io.emit("update-status:task", updatedTask);
+    }
+  );
 });
 
 httpServer.listen(port, () => {

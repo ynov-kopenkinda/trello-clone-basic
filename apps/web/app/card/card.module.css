@@ -37,3 +37,30 @@
 .prioritiy {
   margin-left: auto;
 }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 0.25rem;
+}
+
+.action {
+  padding: 0.25rem;
+  border-radius: 2px;
+  width: 24px;
+  height: 24px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border: 1px solid #eee;
+  background-color: #fff;
+  margin: 0;
+}
+
+.action:hover {
+  background-color: #eee;
+}
+
+.action:active {
+  background-color: #ddd;
+}

@@ -1,3 +1,7 @@
-import type { CardProps } from "./card/card";
-
-export type Task = CardProps & { id: number };
+export interface Task {
+  id: number;
+  title: string;
+  description: string | null;
+  state: string;
+  priority: number;
+}

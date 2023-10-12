@@ -24,13 +24,7 @@ export function TaskList({ tasks }: { tasks: Task[] }): JSX.Element {
   return (
     <>
       {tasks.map((task) => (
-        <Card
-          description={task.description}
-          key={task.id}
-          priority={task.priority}
-          state={task.state}
-          title={task.title}
-        />
+        <Card key={task.id} {...task} />
       ))}
     </>
   );
@@ -44,6 +38,7 @@ export default function Page(): JSX.Element {
     if (socket === null) {
       return;
     }
+    // All of this can be moved to a custom hook btw
     socket.emit("get:tasks");
     socket.on("get:tasks", (_tasks: Task[]) => {
       setTasks(_tasks);
@@ -51,9 +46,21 @@ export default function Page(): JSX.Element {
     socket.on("create:task", (task: Task) => {
       setTasks((prev) => [...prev, task]);
     });
+    socket.on("update-status:task", (task: Task) => {
+      setTasks((prev) => {
+        const index = prev.findIndex((t) => t.id === task.id);
+        if (index === -1) {
+          return prev;
+        }
+        const next = [...prev];
+        next[index] = task;
+        return next;
+      });
+    });
     return () => {
       socket.off("get:tasks");
       socket.off("create:task");
+      socket.off("update-status:task");
     };
   }, [socket]);
 
