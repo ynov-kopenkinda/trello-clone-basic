@@ -59,7 +59,7 @@ export default function Page(): JSX.Element {
 
   const groupedTasks = tasks.reduce(
     (acc, task) => {
-      acc[task.column as keyof typeof acc].push(task);
+      acc[task.state as keyof typeof acc].push(task);
       return acc;
     },
     {

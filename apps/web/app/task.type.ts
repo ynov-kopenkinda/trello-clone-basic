@@ -1,3 +1,3 @@
 import type { CardProps } from "./card/card";
 
-export type Task = CardProps & { column: string; id: number };
+export type Task = CardProps & { id: number };

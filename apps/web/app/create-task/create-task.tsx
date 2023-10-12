@@ -34,7 +34,6 @@ export function CreateTask(): JSX.Element {
               title: title === null ? "" : (title as string),
               description: description === null ? "" : (description as string),
               priority: prioritiy === null ? 0 : Number(prioritiy as string),
-              column: state === null ? "todo" : (state as string),
               state: state === null ? "todo" : (state as string),
             };
             _socket?.emit("create:task", task);

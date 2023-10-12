@@ -15,6 +15,5 @@ model Column {
   title       String
   description String?
   priority    Int
-  state       String
-  column      String // sqlite does not support enums, can't be bothered to setup mysql ';)
+  state      String // sqlite does not support enums, can't be bothered to setup mysql ';)
 }
