@@ -13,3 +13,7 @@
 1. Go to `localhost:3000` in your browser.
 2. Log in with one of available auth providers.
 3. Enjoy!
+
+## Testing
+
+1. Execute `pnpx turbo test` to run all tests.

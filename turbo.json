@@ -27,6 +27,16 @@
       ],
       "persistent": true
     },
-    "lint": {}
+    "lint": {},
+    "test": {
+      "dependsOn": [
+        "^db:generate",
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ]
+    }
   }
 }
