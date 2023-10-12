@@ -9,12 +9,6 @@ const io = createWSServer(httpServer);
 
 // Can be put into a separate file, can't be bothered too :)
 io.on("connection", (socket) => {
-  console.log("a user connected");
-
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
-  });
-
   socket.on("get:tasks", async () => {
     const tasks = await prisma.column.findMany();
     return socket.emit("get:tasks", tasks);
