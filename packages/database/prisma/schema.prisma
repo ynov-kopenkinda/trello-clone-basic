@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Temp {
-  a String @id
+model Column {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  priority    Int
+  state       String
+  column      String // sqlite does not support enums, can't be bothered to setup mysql ';)
 }

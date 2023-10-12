@@ -1,8 +1,6 @@
 // @ts-check
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
-import { config } from "dotenv";
-import path from "path";
 
 export const getEnv = (runtimeEnv = process.env) => {
   return createEnv({
@@ -17,9 +15,5 @@ export const getEnv = (runtimeEnv = process.env) => {
     },
   });
 };
-
-const envPath = path.resolve(process.cwd() + "../../../.env");
-
-config({ path: envPath });
 
 export const env = getEnv();
