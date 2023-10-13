@@ -1,0 +1,8 @@
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background-color: #eee;
+  display: inline-block;
+  border: 1px solid #eee;
+}

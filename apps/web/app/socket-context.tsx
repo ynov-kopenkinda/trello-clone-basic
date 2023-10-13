@@ -1,5 +1,6 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
+import { clientEnv } from "env/client";
 import type { PropsWithChildren } from "react";
 import { createContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
@@ -37,7 +38,7 @@ export function SocketProvider({ children }: PropsWithChildren): JSX.Element {
     if (!user) {
       return;
     }
-    const newSocket = io("ws://localhost:5001", {
+    const newSocket = io(clientEnv.NEXT_PUBLIC_API_URL, {
       auth: {
         token: user.id,
       },

@@ -1,3 +1,4 @@
+import { Avatar } from "../avatar/avatar";
 import type { Task } from "../task.type";
 import { CardActions } from "./actions";
 import styles from "./card.module.css";
@@ -14,7 +15,16 @@ const getStateColor = (state: string): string => {
 export function Card(props: Task): JSX.Element {
   return (
     <div className={styles.card}>
-      <b className={styles.title}>{props.title}</b>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <b className={styles.title}>{props.title}</b>
+        <Avatar userId={props.authorId} />
+      </div>
       {props.description !== null && (
         <p className={styles.description}>{props.description}</p>
       )}

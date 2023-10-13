@@ -3,6 +3,7 @@
     "@clerk/nextjs": "^4.25.4",
     "@formkit/auto-animate": "^0.8.0",
     "@tabler/icons-react": "^2.39.0",
+    "database": "workspace:*",
     "env": "workspace:*",
     "next": "^13.4.19",
     "react": "^18.2.0",
@@ -13,7 +14,6 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.4.19",
-    "@types/node": "^17.0.12",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
     "dotenv-cli": "^7.3.0",

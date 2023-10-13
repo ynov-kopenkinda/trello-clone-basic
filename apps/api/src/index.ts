@@ -1,8 +1,9 @@
 import { type Column, prisma } from "database";
 import { createServer, createWSServer } from "./server";
 import { createServer as createHttpServer } from "node:http";
+import { env } from "env";
 
-const port = process.env.PORT || 5001;
+const port = env.NEXT_PUBLIC_API_PORT;
 const server = createServer();
 const httpServer = createHttpServer(server);
 const io = createWSServer(httpServer);

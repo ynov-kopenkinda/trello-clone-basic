@@ -1,10 +1,45 @@
 {
   "dependencies": {
     "@t3-oss/env-core": "^0.7.0",
+    "@t3-oss/env-nextjs": "^0.7.0",
     "zod": "^3.22.4"
   },
-  "main": "./index.ts",
+  "devDependencies": {
+    "tsconfig": "workspace:*",
+    "tsup": "^5.11.13",
+    "tsx": "^3.7.1",
+    "typescript": "^4.5.5"
+  },
+  "exports": {
+    "./*": {
+      "import": "./dist/*/index.mjs",
+      "require": "./dist/*/index.js",
+      "types": "./dist/*/index.d.ts"
+    },
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/"
+  ],
+  "license": "MIT",
   "name": "env",
-  "types": "./index.ts",
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf .turbo node_modules dist",
+    "dev": "tsup --watch"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*/index.d.ts",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
   "version": "0.0.1"
 }
