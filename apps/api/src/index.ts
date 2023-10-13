@@ -37,6 +37,15 @@ io.on("connection", (socket) => {
       return io.emit("update-status:task", updatedTask);
     }
   );
+
+  socket.on("delete:task", async ({ id }: { id: Column["id"] }) => {
+    const deletedTask = await prisma.column.delete({
+      where: {
+        id,
+      },
+    });
+    return io.emit("delete:task", deletedTask.id);
+  });
 });
 
 httpServer.listen(port, () => {
