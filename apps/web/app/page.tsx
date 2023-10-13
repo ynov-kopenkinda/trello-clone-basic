@@ -1,9 +1,11 @@
 "use client";
+
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Card } from "./card/card";
 import styles from "./page.module.css";
 import type { Task } from "./task.type";
 import { useTasks } from "./use-tasks";
+import { SocketProvider } from "./socket-context";
 
 export function ColumnHeader({
   amount,
@@ -30,18 +32,29 @@ export function TaskList({ tasks }: { tasks: Task[] }): JSX.Element {
   );
 }
 
-export default function Page(): JSX.Element {
+export function TaskListSkeleton(): JSX.Element {
+  return <div className={styles.column} data-skeleton />;
+}
+
+function PageInner(): JSX.Element {
   const [todoListRef] = useAutoAnimate();
   const [inProgressRef] = useAutoAnimate();
   const [doneRef] = useAutoAnimate();
   const { tasks, empty, loading } = useTasks();
 
-  if (loading) {
-    return <div className={styles.empty}> loading... </div>;
+  if (loading || empty) {
+    return (
+      <div className={styles.columns}>
+        {!loading && empty ? (
+          <div className={styles.empty}>Create the first task</div>
+        ) : null}
+        <TaskListSkeleton />
+        <TaskListSkeleton />
+        <TaskListSkeleton />
+      </div>
+    );
   }
-  if (empty) {
-    return <div className={styles.empty}>Create a task first</div>;
-  }
+
   return (
     <div className={styles.columns}>
       <div className={styles.column} ref={todoListRef}>
@@ -57,5 +70,13 @@ export default function Page(): JSX.Element {
         <TaskList tasks={tasks.done} />
       </div>
     </div>
+  );
+}
+
+export default function Page(): JSX.Element {
+  return (
+    <SocketProvider>
+      <PageInner />
+    </SocketProvider>
   );
 }

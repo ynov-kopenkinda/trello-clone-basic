@@ -1,16 +1,7 @@
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useContext } from "react";
+import type { SocketContext } from "./socket-context";
+import { socketContext } from "./socket-context";
 
-export type UseSocket = ReturnType<typeof io> | null;
-
-export const useSocket = (): UseSocket => {
-  const [socket, setSocket] = useState<UseSocket>(null);
-  useEffect(() => {
-    const newSocket = io("ws://localhost:5001");
-    setSocket(newSocket);
-    return () => {
-      newSocket.close();
-    };
-  }, []);
-  return socket;
-};
+export function useSocket(): SocketContext {
+  return useContext(socketContext);
+}

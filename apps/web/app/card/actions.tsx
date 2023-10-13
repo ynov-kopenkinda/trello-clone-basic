@@ -15,7 +15,7 @@ export function CardActions(props: {
   state: Task["state"];
 }): JSX.Element {
   const socket = useSocket();
-  if (socket === null) {
+  if (!socket.connected) {
     return <div />;
   }
   if (props.state === "done") {
@@ -27,7 +27,7 @@ export function CardActions(props: {
         <button
           className={styles.action}
           onClick={() => {
-            socket.emit("update-status:task", {
+            socket.connection.emit("update-status:task", {
               id: props.id,
               state: "todo",
             });
@@ -49,7 +49,7 @@ export function CardActions(props: {
             if (!sure) {
               return;
             }
-            socket.emit("update-status:task", {
+            socket.connection.emit("update-status:task", {
               id: props.id,
               state: "done",
             });
@@ -64,7 +64,7 @@ export function CardActions(props: {
         <button
           className={styles.action}
           onClick={() => {
-            socket.emit("update-status:task", {
+            socket.connection.emit("update-status:task", {
               id: props.id,
               state: "in-progress",
             });
@@ -86,7 +86,7 @@ export function CardActions(props: {
           if (!sure) {
             return;
           }
-          socket.emit("delete:task", {
+          socket.connection.emit("delete:task", {
             id: props.id,
           });
         }}

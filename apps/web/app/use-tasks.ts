@@ -12,22 +12,33 @@ export interface UseTasks {
   };
 }
 
-export const useTasks = (): UseTasks => {
+const sortTasks = (a: Task, b: Task): -1 | 0 | 1 => {
+  // eslint-disable-next-line no-nested-ternary -- It's fine
+  return a.priority < b.priority ? 1 : a.priority === b.priority ? 0 : -1;
+};
+
+export const useTasks = (sort = true): UseTasks => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
   const socket = useSocket();
 
   useEffect(() => {
-    if (socket === null) {
+    if (!socket.connected) {
       return;
     }
-    socket.emit("get:tasks");
-    socket.on("get:tasks", (_tasks: Task[]) => {
+
+    socket.connection.emit("get:tasks");
+
+    socket.connection.on("get:tasks", (_tasks: Task[]) => {
+      setLoading(false);
       setTasks(_tasks);
     });
-    socket.on("create:task", (task: Task) => {
+
+    socket.connection.on("create:task", (task: Task) => {
       setTasks((prev) => [...prev, task]);
     });
-    socket.on("update-status:task", (task: Task) => {
+
+    socket.connection.on("update-status:task", (task: Task) => {
       setTasks((prev) => {
         const index = prev.findIndex((t) => t.id === task.id);
         if (index === -1) {
@@ -38,14 +49,16 @@ export const useTasks = (): UseTasks => {
         return next;
       });
     });
-    socket.on("delete:task", (id: Task["id"]) => {
+
+    socket.connection.on("delete:task", (id: Task["id"]) => {
       setTasks((prev) => prev.filter((t) => t.id !== id));
     });
+
     return () => {
-      socket.off("get:tasks");
-      socket.off("create:task");
-      socket.off("update-status:task");
-      socket.off("delete:task");
+      socket.connection.off("get:tasks");
+      socket.connection.off("create:task");
+      socket.connection.off("update-status:task");
+      socket.connection.off("delete:task");
     };
   }, [socket]);
 
@@ -61,16 +74,14 @@ export const useTasks = (): UseTasks => {
     }
   );
 
-  const sortTasks = (a: Task, b: Task): -1 | 0 | 1 => {
-    // eslint-disable-next-line no-nested-ternary -- It's fine
-    return a.priority < b.priority ? 1 : a.priority === b.priority ? 0 : -1;
-  };
-  groupedTasks.done.sort(sortTasks);
-  groupedTasks.todo.sort(sortTasks);
-  groupedTasks["in-progress"].sort(sortTasks);
+  if (sort) {
+    groupedTasks.done.sort(sortTasks);
+    groupedTasks.todo.sort(sortTasks);
+    groupedTasks["in-progress"].sort(sortTasks);
+  }
 
   return {
-    loading: socket === null,
+    loading: !socket.connected || loading,
     tasks: groupedTasks,
     empty: tasks.length === 0,
   };

@@ -1,14 +1,20 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { IconChevronDown } from "@tabler/icons-react";
 import { useState } from "react";
+import { SocketProvider } from "../socket-context";
 import type { Task } from "../task.type";
 import { useSocket } from "../use-socket";
 import styles from "./create-task.module.css";
 
-export function CreateTask(): JSX.Element {
+function CreateTaskInner(): JSX.Element {
   const [open, setOpen] = useState(false);
-  const _socket = useSocket();
+  const { user } = useUser();
+  const socket = useSocket();
+  if (!user || !socket.connected) {
+    return <div />;
+  }
   return (
     <div className={styles.group}>
       <button
@@ -22,7 +28,9 @@ export function CreateTask(): JSX.Element {
         <IconChevronDown
           size={12}
           style={{
-            transform: open ? "rotateX(180deg) translateY(1px)" : "rotateX(0deg)",
+            transform: open
+              ? "rotateX(180deg) translateY(1px)"
+              : "rotateX(0deg)",
           }}
         />
       </button>
@@ -43,7 +51,7 @@ export function CreateTask(): JSX.Element {
               priority: prioritiy === null ? 0 : Number(prioritiy as string),
               state: state === null ? "todo" : (state as string),
             };
-            _socket?.emit("create:task", task);
+            socket.connection.emit("create:task", task);
             setOpen(false);
           }}
         >
@@ -89,5 +97,13 @@ export function CreateTask(): JSX.Element {
         </form>
       ) : null}
     </div>
+  );
+}
+
+export function CreateTask(): JSX.Element {
+  return (
+    <SocketProvider>
+      <CreateTaskInner />
+    </SocketProvider>
   );
 }

@@ -1,8 +1,21 @@
 .columns {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
   padding: 1rem;
+  height: calc(100vh - 64px);
+  max-height: calc(100vh - 64px);
+  transition: opacity 0.25s ease-in-out;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .column {
@@ -14,9 +27,25 @@
   padding: 1rem;
   border: 1px solid #eee;
   border-radius: 4px;
-  height: calc(100vh - 2rem - 64px);
-  max-height: calc(100vh - 2rem - 64px);
   overflow-y: auto;
+}
+
+.column:not([data-skeleton]) {
+  animation: appear 0.75s ease-in-out forwards;
+}
+
+@keyframes blink {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.column[data-skeleton] {
+  animation: blink 1s infinite alternate;
+  background-color: #fafafa;
 }
 
 .title {
@@ -47,8 +76,14 @@
 }
 
 .empty {
-  text-align: center;
-  padding-top: 4rem;
-  font-size: 2rem;
-  min-height: calc(100vh - 1rem - 64px);
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.25s ease-in-out;
 }
