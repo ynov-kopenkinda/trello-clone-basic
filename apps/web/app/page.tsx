@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import styles from "./page.module.css";
 import { useSocket } from "./use-socket";
 import { Card } from "./card/card";
@@ -32,6 +33,9 @@ export function TaskList({ tasks }: { tasks: Task[] }): JSX.Element {
 
 export default function Page(): JSX.Element {
   const socket = useSocket();
+  const [todoListRef] = useAutoAnimate();
+  const [inProgressRef] = useAutoAnimate();
+  const [doneRef] = useAutoAnimate();
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
@@ -91,18 +95,18 @@ export default function Page(): JSX.Element {
   }
   return (
     <div className={styles.columns}>
-      <div className={styles.column}>
+      <div className={styles.column} ref={todoListRef}>
         <ColumnHeader amount={groupedTasks.todo.length} text="To do" />
         <TaskList tasks={groupedTasks.todo} />
       </div>
-      <div className={styles.column}>
+      <div className={styles.column} ref={inProgressRef}>
         <ColumnHeader
           amount={groupedTasks["in-progress"].length}
           text="In progress"
         />
         <TaskList tasks={groupedTasks["in-progress"]} />
       </div>
-      <div className={styles.column}>
+      <div className={styles.column} ref={doneRef}>
         <ColumnHeader amount={groupedTasks.done.length} text="Done" />
         <TaskList tasks={groupedTasks.done} />
       </div>
