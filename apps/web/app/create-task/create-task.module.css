@@ -4,7 +4,7 @@
 
 .button {
   display: flex;
-  flex-direction: column;
+  gap: 0.25rem;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
@@ -14,16 +14,34 @@
   color: white;
 }
 
+.button svg {
+  transition: all 100ms ease-in-out;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
 .modal {
   position: absolute;
   top: 100%;
-  margin-top: .25rem;
+  margin-top: 0.25rem;
   background-color: #fff;
   padding: 1rem;
   border-radius: 4px;
   border: 1px solid #eee;
   right: 0;
   z-index: 10;
+  animation: appear 250ms ease-in-out;
+  transform-origin: top right;
+  box-shadow: 0 0 4rem rgba(0, 0, 0, 0.1);
 }
 
 .modal > div {
@@ -34,6 +52,6 @@
 .input {
   border: 1px solid #eee;
   border-radius: 4px;
-  padding: .5rem;
-  margin-bottom: .5rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
 }

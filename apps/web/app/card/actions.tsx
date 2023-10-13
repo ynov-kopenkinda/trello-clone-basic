@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  IconCheck,
+  IconFileArrowLeft,
+  IconFileArrowRight,
+} from "@tabler/icons-react";
 import type { Task } from "../task.type";
 import { useSocket } from "../use-socket";
 import styles from "./card.module.css";
@@ -12,10 +17,13 @@ export function CardActions(props: {
   if (socket === null) {
     return <div />;
   }
+  if (props.state === "done") {
+    return <div />;
+  }
   return (
-    <>
+    <div className={styles.actions}>
       {props.state === "in-progress" && (
-        <div className={styles.actions}>
+        <>
           <button
             className={styles.action}
             onClick={() => {
@@ -24,9 +32,10 @@ export function CardActions(props: {
                 state: "todo",
               });
             }}
+            title='Mark as "To Do"'
             type="button"
           >
-            &lt;
+            <IconFileArrowLeft size={12} />
           </button>
           <button
             className={styles.action}
@@ -43,28 +52,28 @@ export function CardActions(props: {
                 state: "done",
               });
             }}
+            title="Mark as done"
             type="button"
           >
-            &gt;
+            <IconCheck size={12} />
           </button>
-        </div>
+        </>
       )}
       {props.state === "todo" && (
-        <div className={styles.actions}>
-          <button
-            className={styles.action}
-            onClick={() => {
-              socket.emit("update-status:task", {
-                id: props.id,
-                state: "in-progress",
-              });
-            }}
-            type="button"
-          >
-            &gt;
-          </button>
-        </div>
+        <button
+          className={styles.action}
+          onClick={() => {
+            socket.emit("update-status:task", {
+              id: props.id,
+              state: "in-progress",
+            });
+          }}
+          title='Mark as "In Progress"'
+          type="button"
+        >
+          <IconFileArrowRight size={12} />
+        </button>
       )}
-    </>
+    </div>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
 
+import { IconChevronDown } from "@tabler/icons-react";
 import { useState } from "react";
-import { useSocket } from "../use-socket";
 import type { Task } from "../task.type";
+import { useSocket } from "../use-socket";
 import styles from "./create-task.module.css";
 
 export function CreateTask(): JSX.Element {
@@ -17,7 +18,13 @@ export function CreateTask(): JSX.Element {
         }}
         type="button"
       >
-        Create a task {!open ? "+" : "-"}
+        Create a task
+        <IconChevronDown
+          size={12}
+          style={{
+            transform: open ? "rotateX(180deg) translateY(1px)" : "rotateX(0deg)",
+          }}
+        />
       </button>
       {open ? (
         <form
