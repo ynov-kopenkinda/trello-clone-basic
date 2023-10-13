@@ -41,6 +41,7 @@ export function SocketProvider({ children }: PropsWithChildren): JSX.Element {
     const newSocket = io(clientEnv.NEXT_PUBLIC_API_URL, {
       auth: {
         token: user.id,
+        avatar: user.imageUrl,
       },
     });
     socket.current = newSocket;

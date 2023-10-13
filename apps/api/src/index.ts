@@ -8,15 +8,17 @@ const server = createServer();
 const httpServer = createHttpServer(server);
 const io = createWSServer(httpServer);
 
-const auth: Record<string, { id: string }> = {};
+const auth: Record<string, { id: string; avatar: string | undefined }> = {};
 
 // Can be put into a separate file, can't be bothered too :)
 io.on("connection", (socket) => {
   auth[socket.id] = {
-    id: socket.handshake.auth.token,
+    id: socket.handshake.auth.token as string,
+    avatar: socket.handshake.auth.avatar as string | undefined,
   };
 
   const userid = () => auth[socket.id].id;
+  const avatar = () => auth[socket.id].avatar;
 
   const isAuthor = async (id: Column["id"]) => {
     const canUpdate = await prisma.column.findFirst({
@@ -32,7 +34,6 @@ io.on("connection", (socket) => {
   };
 
   console.log("connected", socket.id, userid());
-
   socket.on("disconnect", () => {
     console.log("disconnected", socket.id, userid());
     delete auth[socket.id];
@@ -48,6 +49,7 @@ io.on("connection", (socket) => {
       data: {
         ...task,
         authorId: userid(),
+        authorImg: avatar(),
       },
     });
     return io.emit("create:task", newTask);

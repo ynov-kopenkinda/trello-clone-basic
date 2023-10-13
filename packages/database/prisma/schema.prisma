@@ -17,6 +17,7 @@ model Column {
   priority    Int
   state       String // sqlite does not support enums, can't be bothered to setup mysql ';)
   authorId    String
+  authorImg   String?
 
   @@index([authorId])
 }

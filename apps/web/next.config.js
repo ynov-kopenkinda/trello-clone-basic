@@ -1,3 +1,6 @@
+/**
+ * @type {import('next').NextConfig}
+ */
 module.exports = {
   reactStrictMode: true,
   transpilePackages: ["ui"],
@@ -7,5 +10,8 @@ module.exports = {
       bufferutil: "commonjs bufferutil",
     });
     return config;
+  },
+  images: {
+    domains: ["img.clerk.com"],
   },
 };
