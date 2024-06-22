@@ -45,7 +45,7 @@ function CreateTaskInner(): JSX.Element {
             const prioritiy = data.get("task-prioritiy");
             const state = data.get("task-state");
             // No validation, but we can use something like Zod both on the client and server
-            const task: Omit<Task, "id" | "authorId"> = {
+            const task: Omit<Task, "id" | "authorId" | "authorImg"> = {
               title: title === null ? "" : (title as string),
               description: description === null ? "" : (description as string),
               priority: prioritiy === null ? 0 : Number(prioritiy as string),
